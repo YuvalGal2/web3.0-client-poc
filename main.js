@@ -26,14 +26,24 @@ async function requestData() {
     const fileExisting = await isChainExisting();
     if (!fileExisting) {
         const gateWay = await askForGateWayMode();
-        rl.close();
+        rl.pause();
         if (gateWay) {
             const chainFile = `${url}/chain`;
             useWebTwoGateWay(url);
+        } else {
+            const ip = await askForBroker(url);
+            rl.pause();
         }
     }
 }
 
+function askForBroker() {
+    return new Promise((resolve) => {
+        rl.question('Enter a valid IP address for trusted broker: ', (answer) => {
+            resolve(answer);
+        });
+    });
+}
 async function useWebTwoGateWay(url) {
     url = `https://${url}/${gateWayFile}`;
     try {
@@ -58,7 +68,7 @@ function writeDataToFile(payload) {
 }
 
 function askForGateWayMode() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         rl.question('Do you want to use the Web2.0 Gateway? (y/n): ', (answer) => {
             if (answer.toLowerCase() === 'y') {
                 resolve(true);
