@@ -28,14 +28,21 @@ async function requestData() {
         const gateWay = await askForGateWayMode();
         rl.pause();
         if (gateWay) {
-            const chainFile = `${url}/chain`;
-            useWebTwoGateWay(url);
+            const path = `${url}/${gateWayFile}`;
+            const res = await doRequest(path);
+            if (res) {
+                const payload = await res.json();
+                await writeDataToFile(payload);
+            }
         } else {
             const ip = await askForBroker(url);
             rl.pause();
+            console.log("lets stop here for now");
+            // await doRequest(ip);
         }
     }
 }
+
 
 function askForBroker() {
     return new Promise((resolve) => {
@@ -44,13 +51,15 @@ function askForBroker() {
         });
     });
 }
-async function useWebTwoGateWay(url) {
-    url = `https://${url}/${gateWayFile}`;
+async function doRequest(url) {
+    url = `https://${url}`;
+    console.log(url);
     try {
         const res = await fetch(url);
         if (res.ok) {
-            const payload = await res.json();
-            await writeDataToFile(payload);
+            return res;
+        } else {
+            console.log("could not fetch data!");
         }
     } catch (e) {
         console.log('unable to fetch data');
