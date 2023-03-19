@@ -1,0 +1,17 @@
+{
+  "name": "web3.0-client-poc",
+  "version": "0.0.1",
+  "description": "poc",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "web3.0"
+  ],
+  "author": "Yuval Gal",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.21"
+  }
+}
